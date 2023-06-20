@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 
-// Determina si la ruta es absoluta
+// Función que determina si la ruta es absoluta
 function isAbsoluteR(route) {
   try {
     const convertedRoute = path.normalize(route); // Normaliza la ruta para asegurarse de que esté en el formato correcto
@@ -11,7 +11,7 @@ function isAbsoluteR(route) {
   }
 }
 
-// Convierte la ruta en una ruta absoluta
+// Función que convierte la ruta en una ruta absoluta
 function isRelative(route) {
   try {
     return path.resolve(route); // Resuelve la ruta relativa a una ruta absoluta
@@ -20,7 +20,7 @@ function isRelative(route) {
   }
 }
 
-// Verifica si la ruta es válida (existe un archivo o directorio)
+// Función que verifica si la ruta es válida (existe un archivo o directorio)
 function isValid(route) {
   try {
     const isAbsolute = isAbsoluteR(route); // Verifica si la ruta es absoluta
@@ -34,7 +34,7 @@ function isValid(route) {
   }
 }
 
-// Verifica si la ruta corresponde a un archivo o directorio
+// Función que verifica si la ruta corresponde a un archivo o directorio
 function isFileOrDirectory(route) {
   try {
     const resolvedRoute = path.resolve(route); // Resuelve la ruta para obtener una ruta absoluta
@@ -53,7 +53,7 @@ function isFileOrDirectory(route) {
   }
 }
 
-// Verifica si el archivo es un archivo Markdown y extrae los enlaces
+// Función que verifica si el archivo es un archivo Markdown y extrae los enlaces
 function isMarkdownFile(route) {
   try {
     const extname = path.extname(route); // Obtiene la extensión del archivo en la ruta especificada
