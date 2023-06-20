@@ -4,82 +4,82 @@ const fs = require("fs");
 // Determina si la ruta es absoluta
 function isAbsoluteR(route) {
   try {
-    const convertedRoute = path.normalize(route);
-    return path.isAbsolute(convertedRoute);
+    const convertedRoute = path.normalize(route); // Normaliza la ruta para asegurarse de que esté en el formato correcto
+    return path.isAbsolute(convertedRoute); // Verifica si la ruta es absoluta
   } catch (error) {
-    console.log("Error: ", error);
+    console.log("Error: ", error); // Si se produce un error, muestra el mensaje de error en la consola
   }
 }
 
 // Convierte la ruta en una ruta absoluta
 function isRelative(route) {
   try {
-    return path.resolve(route);
+    return path.resolve(route); // Resuelve la ruta relativa a una ruta absoluta
   } catch (error) {
-    console.log("Error: ", error);
+    console.log("Error: ", error); // Si se produce un error, muestra el mensaje de error en la consola
   }
 }
 
 // Verifica si la ruta es válida (existe un archivo o directorio)
 function isValid(route) {
   try {
-    const isAbsolute = isAbsoluteR(route);
-    const isRel = isRelative(route);
-    const resolvedRoute = isAbsolute ? route : isRel;
-    fs.accessSync(resolvedRoute); // Verificar la existencia del archivo o directorio
-    return true;
+    const isAbsolute = isAbsoluteR(route); // Verifica si la ruta es absoluta
+    const isRel = isRelative(route); // Resuelve la ruta relativa a una ruta absoluta
+    const resolvedRoute = isAbsolute ? route : isRel; // Utiliza la ruta absoluta si es absoluta, de lo contrario utiliza la ruta resuelta
+    fs.accessSync(resolvedRoute); // Verifica la existencia del archivo o directorio sincrónicamente
+    return true; // Devuelve true si la ruta es válida y existe
   } catch (error) {
-    console.log("Error:", error);
-    return false;
+    console.log("Error:", error); // Si se produce un error, muestra el mensaje de error en la consola
+    return false; // Devuelve false si la ruta no es válida o no existe
   }
 }
 
 // Verifica si la ruta corresponde a un archivo o directorio
 function isFileOrDirectory(route) {
   try {
-    const resolvedRoute = path.resolve(route);
-    const stats = fs.statSync(resolvedRoute);
+    const resolvedRoute = path.resolve(route); // Resuelve la ruta para obtener una ruta absoluta
+    const stats = fs.statSync(resolvedRoute); // Obtiene información sobre el archivo o directorio en la ruta especificada
 
-    if (stats.isFile()) {
-      return "Archivo";
-    } else if (stats.isDirectory()) {
-      return "Directorio";
+    if (stats.isFile()) { // Comprueba si es un archivo
+      return "Archivo"; // Devuelve "Archivo" si es un archivo
+    } else if (stats.isDirectory()) { // Comprueba si es un directorio
+      return "Directorio"; // Devuelve "Directorio" si es un directorio
     } else {
-      return "Desconocido";
+      return "Desconocido"; // Devuelve "Desconocido" si no es ni un archivo ni un directorio
     }
   } catch (error) {
-    console.log("Error:", error);
-    return "Error";
+    console.log("Error:", error); // Si se produce un error, muestra el mensaje de error en la consola
+    return "Error"; // Devuelve "Error" si se produce un error durante el proceso
   }
 }
 
 // Verifica si el archivo es un archivo Markdown y extrae los enlaces
 function isMarkdownFile(route) {
   try {
-    const extname = path.extname(route);
-    if (extname === ".md") {
+    const extname = path.extname(route); // Obtiene la extensión del archivo en la ruta especificada
+    if (extname === ".md") { // Comprueba si la extensión es ".md" (archivo Markdown)
       return new Promise((resolve, reject) => {
         fs.readFile(route, "utf8", (error, content) => {
           if (error) {
-            console.log("Error:", error);
-            reject(error);
+            console.log("Error:", error); // Si se produce un error al leer el archivo, muestra el mensaje de error en la consola
+            reject(error); // Rechaza la promesa con el error
           } else {
-            const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+            const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g; // Expresión regular para encontrar los enlaces en el contenido
             const links = [];
             let match;
-            while ((match = linkRegex.exec(content))) {
-              const [, text, url] = match;
-              links.push({ text, url });
+            while ((match = linkRegex.exec(content))) { // Busca coincidencias de enlaces en el contenido usando la expresión regular
+              const [, text, url] = match; // Extrae el texto y la URL del enlace
+              links.push({ text, url }); // Agrega el enlace al array de enlaces
             }
-            resolve(links);
+            resolve(links); // Resuelve la promesa con el array de enlaces encontrados
           }
         });
       });
     }
-    return Promise.resolve([]);
+    return Promise.resolve([]); // Si la extensión no es ".md", devuelve una promesa resuelta con un array vacío
   } catch (error) {
-    console.log("Error:", error);
-    return Promise.resolve([]);
+    console.log("Error:", error); // Si se produce un error, muestra el mensaje de error en la consola
+    return Promise.resolve([]); // Devuelve una promesa resuelta con un array vacío
   }
 }
 
@@ -87,17 +87,17 @@ const filePath = "./README.md";
 const fileStatus = isFileOrDirectory(filePath);
 
 if (fileStatus === "Archivo") {
-  if (isMarkdownFile(filePath)) {
+  if (isMarkdownFile(filePath)) { // Llama a la función isMarkdownFile para verificar si es un archivo Markdown
     console.log("El archivo es un archivo .md");
     isMarkdownFile(filePath)
-      .then((links) => {
+      .then((links) => { // Si la promesa se resuelve correctamente, obtiene el resultado de los enlaces
         console.log("Enlaces encontrados:");
-        links.forEach((link) => {
+        links.forEach((link) => { // Itera sobre los enlaces y muestra el texto y la URL
           console.log(`Texto: ${link.text}, URL: ${link.url}`);
         });
       })
       .catch((error) => {
-        console.log("Error:", error);
+        console.log("Error:", error); // Si la promesa es rechazada, muestra el mensaje de error en la consola
       });
   } else {
     console.log("El archivo no es un archivo .md");
