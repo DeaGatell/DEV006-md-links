@@ -11,8 +11,6 @@ function isAbsoluteR(route) {
   }
 }
 
-//console.log(isAbsoluteR('C:\\Users\\USER\\Desktop\\Proyecto4\\DEV006-md-links\\README.md'));
-
 function isRelative(route) {
   try {
     return path.resolve(route);
@@ -25,14 +23,14 @@ function isValid(route) {
   try {
     const isAbsolute = isAbsoluteR(route);
     const isRel = isRelative(route);
-    return isAbsolute || isRel;
+    const resolvedRoute = isAbsolute ? route : isRel;
+    fs.accessSync(resolvedRoute); // Verificar la existencia del archivo o directorio
+    return true;
   } catch (error) {
     console.log('Error:', error);
     return false;
   }
 }
-
-// console.log(isValid('./README.md'));
 
 function isFileOrDirectory(route) {
   try {
@@ -51,8 +49,6 @@ function isFileOrDirectory(route) {
     return 'Error';
   }
 }
-
-//console.log(isFileOrDirectory('./README.md'));
 
 function isMarkdownFile(route) {
   try {
