@@ -6,6 +6,7 @@ const {
   isMarkdownFile,
 } = require("./index.js");
 
+// Función que devuelve un objeto con los resultados de las funciones de verificación de la ruta
 function mdLinks(route) {
   return {
     isAbsoluteR: isAbsoluteR(route),
