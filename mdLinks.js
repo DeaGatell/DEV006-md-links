@@ -20,4 +20,4 @@ function mdLinks(route) {
 console.log(
   mdLinks("C:/Users/USER/Desktop/Proyecto4/DEV006-md-links/README.md")
 );
-//Retorna promesa
+//Cuando esté bien hecha tiene que retornar promesa
