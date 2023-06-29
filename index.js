@@ -3,23 +3,15 @@ const fs = require("fs");
 
 // Función que determina si la ruta es absoluta
 function isAbsoluteR(route) {
-  try {
-    const convertedRoute = path.normalize(route); // Normaliza la ruta para asegurarse de que esté en el formato correcto
-    return path.isAbsolute(convertedRoute); // Verifica si la ruta es absoluta
-  } catch (error) {
-    console.log("Error: ", error); // Si se produce un error, muestra el mensaje de error en la consola
-  }
+  const convertedRoute = path.normalize(route); // Normaliza la ruta para asegurarse de que esté en el formato correcto
+  return path.isAbsolute(convertedRoute); // Verifica si la ruta es absoluta
 }
 //Prueba de isAbsoluteR
 //console.log(isAbsoluteR('C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory//mockREADME.md'));
 
 // Función que convierte la ruta relativa en una ruta absoluta
 function isRelative(route) {
-  try {
-    return path.resolve(route); // Resuelve la ruta relativa a una ruta absoluta
-  } catch (error) {
-    console.log("Error: ", error); // Si se produce un error, muestra el mensaje de error en la consola
-  }
+  return path.resolve(route); // Resuelve la ruta relativa a una ruta absoluta
 }
 //Prueba de isRelative
 //console.log(isRelative('contents//mockREADME.md'));
