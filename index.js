@@ -21,65 +21,51 @@ const convertToAbsolutePath = (pathUser) => {
   }
 };
 
-// Función que verifica si la ruta corresponde a un archivo o directorio
-function isFileOrDirectory(route) {
-  try {
-    const resolvedRoute = path.resolve(route); // Resuelve la ruta proporcionada para obtener la ruta absoluta
-    const stats = fs.statSync(resolvedRoute); // Obtiene información sobre el archivo o directorio en la ruta resuelta
-
-    if (stats.isFile()) {
-      // Comprueba si el objeto stats corresponde a un archivo
-      return "Archivo"; // Devuelve el string 'Archivo' si es un archivo
-    } else if (stats.isDirectory()) {
-      // Comprueba si el objeto stats corresponde a un directorio
-      const files = fs.readdirSync(resolvedRoute); // Obtiene la lista de archivos en el directorio
-      return files.map((file) => path.join(resolvedRoute, file)); // Devuelve un array con las rutas absolutas de los archivos en el directorio
-    }
-  } catch (error) {
-    console.log("Error:", error); // Muestra el mensaje de error en la consola en caso de que se produzca una excepción
-    return "Error"; // Devuelve el string 'Error' si se produce un error
+//Leer el directorio y retornar array de archivos .md
+const readDir = (pathUser) => {
+  const mdFiles = [];
+  const stats = fs.statSync(pathUser);
+  if(stats.isFile() && path.extname(file) === ".md"){
+    return [pathUser];
   }
-}
-//Prueba de isFileOrDirectory
-//console.log(isFileOrDirectory('C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory'));
 
-// Función que verifica si el archivo es un archivo Markdown y extrae los enlaces
-function isMarkdownFile(route) {
-  return new Promise((resolve, reject) => {
-    const extname = path.extname(route); // Obtiene la extensión del archivo en la ruta especificada
-
-    if (extname === ".md") {
-      // Comprueba si la extensión es ".md" (archivo Markdown)
-      fs.readFile(route, "utf8", (error, content) => {
-        if (error) {
-          console.log("Error:", error);
-          reject(error); // Rechaza la promesa si ocurre un error al leer el archivo
-        } else {
-          const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g; // Expresión regular para encontrar los enlaces en el contenido
-          const links = [];
-          let match;
-          while ((match = linkRegex.exec(content))) {
-            // Busca coincidencias de enlaces en el contenido usando la expresión regular
-            const [, text, url] = match; // Extrae el texto y la URL del enlace
-            links.push({ text, url }); // Agrega el enlace al array de enlaces
-          }
-
-          resolve({
-            isMarkdown: true,
-            links,
-          }); // Resuelve la promesa con el objeto de resultado
-        }
-      });
-    } 
+  const files = fs.readdirSync(pathUser);
+  files.forEach((file) => {
+    const absoluteFilePath = path.join(pathUser, file);
+   const stats = fs.statSync(absoluteFilePath);
+    if (stats.isDirectory()) {
+      mdFiles.push(...readDir(absoluteFilePath));
+    } else {
+      if (path.extname(file) === ".md") {
+        mdFiles.push(absoluteFilePath);
+      }
+    }
+    
   });
-}
-//Prueba de isMarkdownFile
-//console.log(isMarkdownFile("C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory//mockREADME.md"));
-
-module.exports = {
-  isAbsoluteR,
-  isRelative,
-  isValid,
-  isFileOrDirectory,
-  isMarkdownFile,
+//  console.log(mdFiles);
+  return mdFiles;
 };
+
+
+
+//leer archivos .md
+const readFileMd = (pathUser) => {
+  return new Promise((resolve, reject) => {
+    let links = [];
+    fs.readFile(pathUser, "utf8", (err, data) => {
+      if (err) {
+        reject(err, "No se puede leer el archivo");
+      } else {
+        const regex = /\[([^\]]+)\]\(([^)]+)\)/g;
+        let match;
+        while ((match = regex.exec(data))){
+          const text = match[1];
+          const url = match[2];
+          links.push({ href: url, text, file: pathUser });
+        }
+        }
+        
+        resolve(links);
+      });
+    });
+  };
