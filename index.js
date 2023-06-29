@@ -69,3 +69,88 @@ const readFileMd = (pathUser) => {
       });
     });
   };
+
+  //Validar si es una URL
+const validateUrl = (links) => {
+  return new Promise((resolve, reject) => {
+    fetch(links.href)
+      .then((response) => {
+        const status = response.status;
+        const statusText = status >= 200 && status < 399 ? "OK" : "Fail";
+        resolve({ status, statusText });
+      })
+      .catch((error) => {
+        const status = 404; // Not Found
+        const statusText = "Fail";
+        reject({ status, statusText, error });
+      });
+      // console.log(links);
+  });
+  
+};
+
+
+//Validar si la URL es correcta o no el status
+const validateURLs = (urls, filePath) => {
+  const urlPromises = urls.map((urlInfo) => {
+    return validateUrl(urlInfo)
+      .then(({ status }) => {
+        return {
+          href: urlInfo.href,
+          text: urlInfo.text,
+          file: filePath,
+          status: status,
+          statusText: status >= 200 && status < 399 ? "OK" : "Fail",
+        };
+      })
+      .catch((error) => {
+        return {
+          href: urlInfo.href,
+          text: urlInfo.text,
+          file: filePath,
+          status: error.status,
+          statusText: error.statusText,
+        };
+      });
+  });
+   //array de promesas
+  return Promise.all(urlPromises);
+};
+
+//Links de archivos .md que no esten repetidos
+const uniqueLinks = (links) => {
+  const uniqueLinks = [];
+  links.forEach((link) => {
+    const linkExists = uniqueLinks.find((uniqueLink) => {
+      return uniqueLink.href === link.href;
+    });
+    if (!linkExists) {
+      uniqueLinks.push(link);
+    }
+  });
+  return uniqueLinks;
+  
+};
+
+//Links de archivos .md que esten rotos
+const brokenLinks = (links) => {
+  const brokenLinks = [];
+  links.forEach((link) => {
+    if (link.statusText === "Fail") {
+      brokenLinks.push(link);
+    }
+  });
+  // console.log(brokenLinks);
+  return brokenLinks;
+};
+
+module.exports = {
+  pathExists, 
+  convertToAbsolutePath,
+  readDir,
+  readFileMd,
+  validateUrl,
+  validateURLs,
+  uniqueLinks,
+  brokenLinks,
+};
