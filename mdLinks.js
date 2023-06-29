@@ -42,7 +42,7 @@ function mdLinks(path, options) {
 //console.log(`Texto: ${link.text}, URL: ${link.url}`);
 //});
 //} else {
-//console.log(`El archivo no es un archivo .md. Es de tipo ${result.fileType}`);
+//console.log(`El archivo no es un archivo .md.`);
 //}
 //})
 //.catch((error) => {

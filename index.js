@@ -11,7 +11,7 @@ function isAbsoluteR(route) {
   }
 }
 //Prueba de isAbsoluteR
-console.log(isAbsoluteR('C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory//mockREADME.md'));
+//console.log(isAbsoluteR('C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory//mockREADME.md'));
 
 // Función que convierte la ruta relativa en una ruta absoluta
 function isRelative(route) {
@@ -22,7 +22,7 @@ function isRelative(route) {
   }
 }
 //Prueba de isRelative
-console.log(isRelative('contents//mockREADME.md'));
+//console.log(isRelative('contents//mockREADME.md'));
 
 // Función que verifica si la ruta es válida (existe un archivo o directorio)
 function isValid(route) {
@@ -38,7 +38,7 @@ function isValid(route) {
   }
 }
 //Prueba de isValid
-console.log(isValid('C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory//mockREADME.md'));
+//console.log(isValid('C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory//mockREADME.md'));
 
 // Función que verifica si la ruta corresponde a un archivo o directorio
 function isFileOrDirectory(route) {
@@ -60,7 +60,7 @@ function isFileOrDirectory(route) {
   }
 }
 //Prueba de isFileOrDirectory
-console.log(isFileOrDirectory('C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory'));
+//console.log(isFileOrDirectory('C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory'));
 
 // Función que verifica si el archivo es un archivo Markdown y extrae los enlaces
 function isMarkdownFile(route) {
@@ -89,20 +89,11 @@ function isMarkdownFile(route) {
           }); // Resuelve la promesa con el objeto de resultado
         }
       });
-    } else {
-      resolve({
-        isMarkdown: false,
-        fileType: extname,
-      }); // Resuelve la promesa con el objeto indicando que no es un archivo Markdown y el tipo de archivo
-    }
+    } 
   });
 }
 //Prueba de isMarkdownFile
-console.log(
-  isMarkdownFile(
-    "C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory//mockREADME.md"
-  )
-);
+//console.log(isMarkdownFile("C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory//mockREADME.md"));
 
 module.exports = {
   isAbsoluteR,
