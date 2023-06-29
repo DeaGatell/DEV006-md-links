@@ -1,36 +1,25 @@
 const path = require("path");
 const fs = require("fs");
+const fetch = require("node-fetch");
+pathUser = process.argv[2];
 
-// Función que determina si la ruta es absoluta
-function isAbsoluteR(route) {
-  const convertedRoute = path.normalize(route); // Normaliza la ruta para asegurarse de que esté en el formato correcto
-  return path.isAbsolute(convertedRoute); // Verifica si la ruta es absoluta
-}
-//Prueba de isAbsoluteR
-//console.log(isAbsoluteR('C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory//mockREADME.md'));
-
-// Función que convierte la ruta relativa en una ruta absoluta
-function isRelative(route) {
-  return path.resolve(route); // Resuelve la ruta relativa a una ruta absoluta
-}
-//Prueba de isRelative
-//console.log(isRelative('contents//mockREADME.md'));
-
-// Función que verifica si la ruta es válida (existe un archivo o directorio)
-function isValid(route) {
-  try {
-    const isAbsolute = isAbsoluteR(route); // Verifica si la ruta es absoluta
-    const isRel = isRelative(route); // Resuelve la ruta relativa a una ruta absoluta
-    const resolvedRoute = isAbsolute ? route : isRel; // Utiliza la ruta absoluta si es absoluta, de lo contrario utiliza la ruta resuelta
-    fs.accessSync(resolvedRoute); // Verifica la existencia del archivo o directorio sincrónicamente
-    return true; // Devuelve true si la ruta es válida y existe
-  } catch (error) {
-    console.log("Error:", error); // Si se produce un error, muestra el mensaje de error en la consola
-    return false; // Devuelve false si la ruta no es válida o no existe
+//Confirmar si la ruta existe
+const pathExists = (pathUser) => {
+  if (fs.existsSync(pathUser)) {
+    return true;
+  } else {
+    return false;
   }
-}
-//Prueba de isValid
-//console.log(isValid('C://Users//USER//Desktop//Proyecto4//DEV006-md-links//mock-directory//mockREADME.md'));
+};
+
+//Verificar si la ruta es absoluta, si es relativa convertirla a absoluta
+const convertToAbsolutePath = (pathUser) => {
+  if (path.isAbsolute(pathUser)) {
+    return pathUser;
+  } else {
+    return path.resolve(process.cwd(), pathUser);
+  }
+};
 
 // Función que verifica si la ruta corresponde a un archivo o directorio
 function isFileOrDirectory(route) {
