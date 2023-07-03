@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const fetch = require("node-fetch");
+const fetch = require("node-fetch").default;
 pathUser = process.argv[2]; // Obtener la ruta del usuario desde los argumentos de la línea de comandos
 
 // Función que verifica si una ruta de archivo o directorio existe
@@ -81,7 +81,7 @@ const readFileMd = (pathUser) => {
   });
 };
 
-// Función que valida la URL 
+// Función que valida la URL
 const validateUrl = (links) => {
   return new Promise((resolve, reject) => {
     fetch(links.href)
@@ -131,36 +131,6 @@ const validateURLs = (urls, filePath) => {
   return Promise.all(urlPromises); // Devolver una promesa que se resuelve cuando todas las validaciones de URLs han finalizado
 };
 
-// Función que obtiene los enlaces únicos de archivos .md
-const uniqueLinks = (links) => {
-  const uniqueLinks = []; // Array para almacenar los enlaces únicos
-
-  links.forEach((link) => {
-    const linkExists = uniqueLinks.find((uniqueLink) => {
-      return uniqueLink.href === link.href; // Verificar si el enlace ya existe en el array uniqueLinks
-    });
-
-    if (!linkExists) {
-      uniqueLinks.push(link); // Si el enlace no existe, se agrega al array uniqueLinks
-    }
-  });
-
-  return uniqueLinks; // Devolver el array de enlaces únicos
-};
-
-// Función que obtiene los enlaces rotos de archivos .md
-const brokenLinks = (links) => {
-  const brokenLinks = []; // Array para almacenar los enlaces rotos
-
-  links.forEach((link) => {
-    if (link.statusText === "Fail") {
-      brokenLinks.push(link); // Si el estado del enlace es "Fail", se agrega al array brokenLinks
-    }
-  });
-
-  return brokenLinks; // Devolver el array de enlaces rotos
-};
-
 module.exports = {
   pathExists,
   convertToAbsolutePath,
@@ -168,6 +138,4 @@ module.exports = {
   readFileMd,
   validateUrl,
   validateURLs,
-  uniqueLinks,
-  brokenLinks,
 };
