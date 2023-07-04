@@ -8,6 +8,7 @@ const {
 
 const pathUser = process.argv[2];
 
+//Proceso de mdLinks
 //function mdLinks(path, options) {
   //return new Promise((resolve, reject) => {
     // Verificar y procesar la ruta proporcionada
