@@ -40,9 +40,9 @@ const mdLinks = (pathUser, options = { validate: false }) => {
       return;
     }
 
-    const promises = mdFiles.map((file) => {
-      return readFileMd(file)
-        .then((links) => {
+    const promises = mdFiles.map((file) => { //Crea un array de promesas y usa la funcion map para iterar sobre cada elemento del array mdFiles
+      return readFileMd(file) //Retorna una promesa que se resuelve en un array de links
+        .then((links) => {//El .then maneja la promesa resuelta y toma una funcion callback que recibe el valor resuelto que es el array de links
           if (options.validate) {
             // Si la opción de validación está habilitada, validar los enlaces encontrados
             return validateURLs(links, file);
@@ -57,11 +57,11 @@ const mdLinks = (pathUser, options = { validate: false }) => {
         });
     });
 
-    Promise.all(promises)
-      .then((results) => {
+    Promise.all(promises) //Se utiliza el método Promise.all() para manejar un array de promesas llamado promises
+      .then((results) => { //Cuando todas las promesas en el array se resuelven, el .then se ejecuta usando un callback
         // Combinar todos los enlaces de los archivos .md en un solo array
         const allLinks = results.flat();
-        resolve(allLinks);
+        resolve(allLinks); //Se resuelve el array combinado de links
       })
       .catch((error) => {
         // Si ocurre un error al procesar los enlaces, rechazar la promesa con el error
