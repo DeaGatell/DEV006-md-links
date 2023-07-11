@@ -77,3 +77,4 @@ const mdLinks = (pathUser, options = { validate: false }) => {
 //Si ocurre algún error durante el proceso, la promesa se rechaza con el error correspondiente.
 
 module.exports = {mdLinks};
+
